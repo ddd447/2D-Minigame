@@ -19,12 +19,11 @@ using Image = System.Windows.Controls.Image;
 
 namespace _2D_Minigame
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    
     public partial class MainWindow : Window
     {
         private List<(CustomLabel, int, int)> labelList = new List<(CustomLabel, int, int)>();
+        
         private Player player; 
 
         public MainWindow()
@@ -40,7 +39,6 @@ namespace _2D_Minigame
             this.KeyDown += new KeyEventHandler(Window_KeyDown);
         }
 
-        
         private void PlacePlayer(int x, int y)
         {
             int index = y * 39 + x;
@@ -60,8 +58,6 @@ namespace _2D_Minigame
             label.HorizontalContentAlignment = HorizontalAlignment.Center;
             label.VerticalContentAlignment = VerticalAlignment.Center;
         }
-
-
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             int newX = player.X;
@@ -88,7 +84,6 @@ namespace _2D_Minigame
                 MovePlayer(newX, newY);
             }
         }
-
         private bool IsMoveValid(int x, int y)
         {
             if (x < 0 || y < 0 || x >= 39 || y >= 15)
@@ -97,7 +92,6 @@ namespace _2D_Minigame
             int index = y * 39 + x;
             return labelList[index].Item1.Background == Brushes.White;
         }
-
         private void MovePlayer(int newX, int newY)
         {
             int oldIndex = player.Y * 39 + player.X;
@@ -108,8 +102,6 @@ namespace _2D_Minigame
 
             PlacePlayer(newX, newY);
         }
-
-
         private void CreateLabels()
         {
             int Spacing = 20;
@@ -130,7 +122,6 @@ namespace _2D_Minigame
                 }
             }
         }
-
         private void SetLabelPosition(int i, int j, CustomLabel label)
         {
             Grid.SetRow(label, i);
@@ -147,7 +138,7 @@ namespace _2D_Minigame
         private void PlaceQuestionMarksOnLabels(CustomLabel label, int i, int j)
         {
             Random random = new Random();
-            if (i == j || i + j == 38 || random.NextDouble() < 0.25) // diagonal, Fragezeichen-Wahrscheinlichkeit: 75% guter wert
+            if (i == j || i + j == 38 || random.NextDouble() < 0.75) // diagonal, Fragezeichen-Wahrscheinlichkeit: 75% guter wert
             {
                 label.CustomAttribute = "Brushes.LightGray";
 
@@ -185,29 +176,26 @@ namespace _2D_Minigame
         {
             labelList.Add((label, i, j));
         }
-
         private void TestChangeOnCurrentFields()
         {
             for (int i = 0; i < labelList.Count; i++)
             {
-                labelList[i].Item1.Background = Brushes.White; // Erstmal alle wieder weiß machen
+                labelList[i].Item1.Background = Brushes.White; 
                 labelList[i].Item1.isQuestionMarkField = false;
                 labelList[i].Item1.Content = "";
 
-                if (i < 39 || i % 39 == 0 || i % 39 == 38 || i > 544) // Grauer Rahmen erstellen
+                if (i < 39 || i % 39 == 0 || i % 39 == 38 || i > 544) 
                 {
                     labelList[i].Item1.Background = Brushes.Gray;
                 }
             }
 
-            labelList[80].Item1.Background = Brushes.Black; // Startfeld erstellen
+            labelList[80].Item1.Background = Brushes.Black; 
 
-            GenerateMaze(); // Labyrinth generieren
+            GenerateMaze();
         }
-
         private void GenerateMaze()
         {
-            // Fülle das Spielfeld mit Wänden (schwarze Felder)
             foreach (var label in labelList)
             {
                 label.Item1.Background = Brushes.Black;
@@ -231,7 +219,6 @@ namespace _2D_Minigame
 
                 List<int> neighbors = new List<int>();
 
-                // Finde alle Nachbarn, die noch nicht besucht wurden
                 if (x >= 2 && labelList[index - 2].Item1.Background == Brushes.Black)
                     neighbors.Add(index - 2);
                 if (x < 37 && labelList[index + 2].Item1.Background == Brushes.Black)
@@ -243,19 +230,15 @@ namespace _2D_Minigame
 
                 if (neighbors.Count > 0)
                 {
-                    // Wähle einen zufälligen Nachbarn
                     int nextIndex = neighbors[rand.Next(neighbors.Count)];
                     int nextX = nextIndex % 39;
                     int nextY = nextIndex / 39;
 
-                    // Entferne die Wand zwischen den Zellen
                     labelList[nextY * 39 + nextX].Item1.Background = Brushes.White;
 
-                    // Markiere die nächste Zelle als besucht und schiebe sie auf den Stack
                     labelList[nextIndex].Item1.Background = Brushes.White;
                     stack.Push(nextIndex);
 
-                    // Markiere die Zelle zwischen den Zellen als besucht
                     if (nextX > x)
                         labelList[y * 39 + x + 1].Item1.Background = Brushes.White;
                     else if (nextX < x)
@@ -265,7 +248,6 @@ namespace _2D_Minigame
                     else if (nextY < y)
                         labelList[(y - 1) * 39 + x].Item1.Background = Brushes.White;
 
-                    // Schiebe die nächste Zelle auf den Stack
                     stack.Push(nextIndex);
                 }
             }
