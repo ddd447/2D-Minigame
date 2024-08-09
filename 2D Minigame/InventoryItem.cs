@@ -10,10 +10,10 @@ namespace _2D_Minigame
     {
         public string Name { get; set; }
         public string ImagePath { get; set; }
-        public int Level { get; set; }//angedacht als level der waffe um die stärke darzustellen
-        public int LevelPoints { get; set; }//angedacht mit evtl gesammelter waffenep upgrades freizuschalten
+        public int Level { get; set; }
+        public int LevelPoints { get; set; }
         public string rarity { get; set; }
-        public int ItemIdentNumber { get; set; }//angedacht um eine unverwechselbarkeit für das programm zu schaffen und so den aktuellen zustand jeder waffe anhand der nummer zu identifizieren
+        public int ItemIdentNumber { get; set; }
         public int Durability { get; set; }
         public int Damage { get; set; }
         public int Healing { get; set; }

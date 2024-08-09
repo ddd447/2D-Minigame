@@ -6,8 +6,8 @@
         mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920" VerticalAlignment="Center" HorizontalAlignment="Center"
         Title="MainWindow" MinHeight="1000" Height="1200" MinWidth="2000" Width="2000">
-    <!--hier wurde minheight und minwidth eingefügt ohne nutzen-->
+    
     <Grid x:Name="myGrid" MinHeight="1080" MinWidth="1920" Background="Beige" >
-        <!--VerticalAlignment="Center" HorizontalAlignment="Center"-->
+        
     </Grid>
 </Window>

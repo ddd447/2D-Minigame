@@ -11,27 +11,16 @@ namespace _2D_Minigame
 {
     public class CustomLabel : Label
     {
-        //erkennung welches Feld welchen status hat 
-        /// <summary>
-        /// Brushes.LightGray = Weg/Floor
-        /// Brushes.Gray = Mauer/Wand
-        /// Brushes.Blue = zwischenschritt um doppelte ansteuerung der Gegner bewegungsmethode zu vermeiden
-        /// Brushes.Red = Gegner Feld - spawn bei betreten einen Gegner
-        /// </summary>
+       
         public string CustomAttribute { get; set; }
 
-        //wenn Item auf einem Feld liegt
-        /// <summary>
-        /// 
-        /// </summary>
-        /// 
 
         public bool isQuestionMarkField { get; set; }
-        public bool IsItemAvailable { get; set; }//
-        public string Item { get; set; }//welche Art von Item
-        public int ItemIdentNumber { get; set; }//welches Item genau //
+        public bool IsItemAvailable { get; set; }
+        public string Item { get; set; }
+        public int ItemIdentNumber { get; set; }
 
-        //Aktuelle Position aller Gegner erkennbar
+        
         public bool IsEnemyField { get; set; }
         public int MaxEnemyHealth { get; set; }
         public int CurrentEnemyHealth { get; set; }
@@ -45,11 +34,11 @@ namespace _2D_Minigame
 
         public InventoryItem CustomItem { get; set; }
 
-        // Weitere benutzerdefinierte Attribute können hier hinzugefügt werden
+        
         public CustomLabel()
         {
-            IsEnemyField = false; // Standardmäßig auf false setzen
-            IsItemAvailable = false; // Standardmäßig auf false setzen
+            IsEnemyField = false; 
+            IsItemAvailable = false; 
 
             VerticalAlignment = VerticalAlignment.Top;
             HorizontalAlignment = HorizontalAlignment.Left;
