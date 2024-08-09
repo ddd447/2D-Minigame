@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>_2D_Minigame</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="cat_idle.gif" />
+    <None Remove="iron_giant_2x.png" />
+    <None Remove="Pathfinder Roleplaying Game Dungeons &amp; Dragons Character PNG - Free Download.jfif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="cat_idle.gif" />
+    <Resource Include="iron_giant_2x.png" />
+    <Resource Include="Pathfinder Roleplaying Game Dungeons &amp; Dragons Character PNG - Free Download.jfif" />
+  </ItemGroup>
+
+</Project>
