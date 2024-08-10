@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace _2D_Minigame
 {
+    //attribute noch nicht in verwendung?
     public class Player
     {
         public int X { get; set; }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace _2D_Minigame
 {
+
+    //aktuell noch nicht in verwendung?
     public class InventoryItem
     {
         public string Name { get; set; }
@@ -31,7 +33,6 @@ namespace _2D_Minigame
             Healing = 0;
             IncreaseHitPoints = 0;
             SellingPriceInGold = 0f;
-
         }
 
     }

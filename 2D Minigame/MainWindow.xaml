@@ -5,9 +5,42 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920" VerticalAlignment="Center" HorizontalAlignment="Center"
-        Title="MainWindow" MinHeight="1000" Height="1200" MinWidth="2000" Width="2000">
-    
-    <Grid x:Name="myGrid" MinHeight="1080" MinWidth="1920" Background="Beige" >
-        
+        Title="MainWindow" MinHeight="1200" MaxHeight="1200" Height="1200" MinWidth="2000" Width="2000" MaxWidth="2000">
+
+    <Grid x:Name="MainGrid" MinHeight="1080" MinWidth="1920" Background="Beige">
+
+        <!-- Hauptmenü -->
+        <Grid x:Name="MenuGrid">
+            <Grid.Background>
+                <ImageBrush ImageSource="1920x1080 Menu Screen.png" Stretch="Fill" />
+            </Grid.Background>
+            <Button Content="Spiel Starten" 
+                Width="150" 
+                Height="50" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" 
+                Click="StartGameButton_Click" Margin="1451,823,0,0"/>
+        </Grid>
+
+        <!-- Spielfeld -->
+        <Grid x:Name="GameGrid" Visibility="Collapsed">
+            
+            <Grid x:Name="myGrid" MinHeight="1080" MinWidth="1920" />
+
+            <Border Background="#80000000" BorderBrush="White" BorderThickness="2" 
+    CornerRadius="10" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,100,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image Source="C:\Users\pilic\source\repos\2D Minigame\2D Minigame\coin 2.png" Width="30" Height="30" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="CoinCounter" Text="0" FontSize="36" Foreground="White"
+               VerticalAlignment="Center" Margin="10,0,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Grid.Background>
+                <ImageBrush ImageSource="1920x1080 Menu Screen.png" Stretch="Fill" />
+            </Grid.Background>
+        </Grid>
+
     </Grid>
+
 </Window>
