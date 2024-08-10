@@ -33,8 +33,8 @@ The game state was such that 10 enemies were spawned over time, depending on the
 
 The items were displayed in the inventory; however, I had significant difficulties with the inventory system, so I had to proceed with further functionality. Making the inventory usable was a future goal. Additionally, there was a scoreboard that was only reached after defeating all 10 enemies, and a high score could be entered if you managed to achieve one. The biggest problem at that time was that the game would randomly freeze, requiring the application to be restarted. My plan was to simplify the generation and overall functionality in the future and to make the generation more reliable so that all fields could be accessed.
 
-![image](https://github.com/user-attachments/assets/54868033-5f53-467e-b18e-7c31736bd59f)
-![image](https://github.com/user-attachments/assets/0d306eb0-c6e2-437f-91e3-ec4dd4e46c95)
+![image](https://github.com/user-attachments/assets/0dd3f8c0-12f3-4922-8028-4bebb6304b97)
+![image](https://github.com/user-attachments/assets/88ebcb9b-2723-4570-8544-3ebd95c8944d)
 ![image](https://github.com/user-attachments/assets/79dcc6d7-a6ce-4e2e-a1a3-5ca841a0df3f)
 ![image](https://github.com/user-attachments/assets/4e55f7b5-26ff-47a0-9f7c-a58cbeab76db)
 
