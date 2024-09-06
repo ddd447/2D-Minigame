@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using static System.Net.Mime.MediaTypeNames;
 using Image = System.Windows.Controls.Image;
+using System.Runtime.InteropServices;//for debugging
 
 namespace _2D_Minigame
 {
@@ -25,43 +26,30 @@ namespace _2D_Minigame
     {
         private List<(CustomLabel, int, int)> labelList = new List<(CustomLabel, int, int)>();
         private Player player;
-        private MediaPlayer mediaPlayer; //backgroundSound
-        private ImageBrush fieldImageBrush; 
+        private MediaPlayer mediaPlayer_BackgroundSound; //backgroundSound
+        private ImageBrush fieldImageBrush;
         private int coinCount = 0;
         private MediaPlayer coinSoundPlayer; //CoinSound
         private RadialGradientBrush fogBrush;
 
+        /**debug option**/
+        //[DllImport("kernel32.dll")]
+        //[return: MarshalAs(UnmanagedType.Bool)]
+        //static extern bool AllocConsole();
+
+
         public MainWindow()
         {
             InitializeComponent();
-            ShowMainMenu();//Sobald StartGame  aufgerufen wird Start!
+            ShowMainMenu();//StartGame() starts the game with a button in main menu
+            //AllocConsole();
         }
 
-        private void InitializeCoinSound()
-        {
-            try
-            {
-                coinSoundPlayer = new MediaPlayer();
-                coinSoundPlayer.Open(new Uri("C:\\Users\\pilic\\source\\repos\\2D Minigame\\2D Minigame\\coinsplash.mp3"));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Fehler beim Laden des Sounds: " + ex.Message);
-            }
-        }
-        private void InitializeFieldImageBrush()
+        private void Initialize_FieldImageBrush()
         {
             fieldImageBrush = new ImageBrush();
             fieldImageBrush.ImageSource = new BitmapImage(new Uri("C:\\Users\\pilic\\source\\repos\\2D Minigame\\2D Minigame\\05muronero.jpg", UriKind.Absolute));
         }
-        private void InitializeMediaPlayer()
-        {
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.Open(new Uri("C:\\Users\\pilic\\source\\repos\\2D Minigame\\2D Minigame\\Sounds\\Coole Background Musik Spannung\\cannontube_loop_medium.mp3")); 
-            mediaPlayer.Volume = 0.1; 
-            mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
-            mediaPlayer.Play(); 
-        }//background sound startet hier
         private void InitializeFogBrush()
         {
             fogBrush = new RadialGradientBrush();
@@ -73,47 +61,66 @@ namespace _2D_Minigame
             fogBrush.GradientStops.Add(new GradientStop(Colors.DarkGray, 0.0));
             fogBrush.GradientStops.Add(new GradientStop(Colors.Black, 1.0));
         }
+        private void Initialize_MediaPlayer_BackgroundSound()
+        {
+            mediaPlayer_BackgroundSound = new MediaPlayer();
+            mediaPlayer_BackgroundSound.Open(new Uri("C:\\Users\\pilic\\source\\repos\\2D Minigame\\2D Minigame\\Sounds\\Coole Background Musik Spannung\\cannontube_loop_medium.mp3"));
+            mediaPlayer_BackgroundSound.Volume = 0.1;
+            mediaPlayer_BackgroundSound.MediaEnded += MediaPlayer_MediaEnded;
+            mediaPlayer_BackgroundSound.Play();
+        }
+        private void Initialize_CoinSound()
+        {
+            try
+            {
+                coinSoundPlayer = new MediaPlayer();
+                coinSoundPlayer.Open(new Uri("C:\\Users\\pilic\\source\\repos\\2D Minigame\\2D Minigame\\coinsplash.mp3"));
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine("Error starting the sound: " + ex.Message);
+            }
+        }
 
-        //Sounds?
+        //Sounds
         private void PlayCoinSound()
         {
             try
             {
-                coinSoundPlayer.Stop(); 
-                coinSoundPlayer.Position = TimeSpan.Zero; 
-                coinSoundPlayer.Play(); 
+                coinSoundPlayer.Stop();
+                coinSoundPlayer.Position = TimeSpan.Zero;
+                coinSoundPlayer.Play();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Fehler beim Abspielen des Sounds: " + ex.Message);
+                Console.WriteLine("Error starting the sound: " + ex.Message);
             }
         }
         private void MediaPlayer_MediaEnded(object sender, EventArgs e)
         {
-            mediaPlayer.Position = TimeSpan.Zero; 
-            mediaPlayer.Play(); 
+            mediaPlayer_BackgroundSound.Position = TimeSpan.Zero;
+            mediaPlayer_BackgroundSound.Play();
         }
 
 
-        //ergänzung Coins
+        //Add collectable coins
         private void CollectCoin(int x, int y)
         {
             coinCount++;
-            CoinCounter.Text = coinCount.ToString(); 
+            CoinCounter.Text = coinCount.ToString();
             PlayCoinSound();
         }
         private void SpawnCoins()
         {
-           
             var walkableFields = labelList
                 .Where(label => label.Item1.Background == fogBrush || label.Item1.Background == Brushes.LightGray)
                 .Select(label => label.Item1)
-                .OfType<CustomLabel>() 
+                .OfType<CustomLabel>()
                 .ToList();
 
             if (walkableFields.Count < 15)
             {
-                MessageBox.Show("Problem: Mind. 15 Münzen sollten platziert werden. Ist nicht Möglich da zu wenig betretbare Felder existieren");
+                Console.WriteLine("Bug - to few coins placed");
                 return;
             }
 
@@ -129,15 +136,25 @@ namespace _2D_Minigame
                 {
                     selectedFields.Add(selectedField);
                 }
+                else
+                {
+                }
             }
 
             foreach (var field in selectedFields)
             {
                 PlaceCoinOnField(field);
             }
+
+            int coinFieldCount = selectedFields.Count(field => field.isCoinField);
         }
         private void PlaceCoinOnField(CustomLabel label)
         {
+            if (label.isCoinField)
+            {
+                return;
+            }
+
             Image coinImage = new Image
             {
                 Source = new BitmapImage(new Uri("C:\\Users\\pilic\\source\\repos\\2D Minigame\\2D Minigame\\coin 2.png")),
@@ -159,11 +176,11 @@ namespace _2D_Minigame
         private void StartGame()
         {
             InitializeFogBrush();
-            InitializeFieldImageBrush();
-            InitializeCoinSound();
+            Initialize_FieldImageBrush();
+            Initialize_CoinSound();
 
-            MenuGrid.Visibility = Visibility.Collapsed; 
-            GameGrid.Visibility = Visibility.Visible; 
+            MenuGrid.Visibility = Visibility.Collapsed;
+            GameGrid.Visibility = Visibility.Visible;
 
             player = new Player(1, 1);
 
@@ -174,16 +191,16 @@ namespace _2D_Minigame
             SpawnCoins();
 
             this.KeyDown += new KeyEventHandler(Window_KeyDown);
-            InitializeMediaPlayer();
+            Initialize_MediaPlayer_BackgroundSound();
 
         }
         private void ShowMainMenu()
         {
-            MenuGrid.Visibility = Visibility.Visible; 
-            GameGrid.Visibility = Visibility.Collapsed; 
+            MenuGrid.Visibility = Visibility.Visible;
+            GameGrid.Visibility = Visibility.Collapsed;
         }
 
-        //Bewegen
+        //Moving
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             int newX = player.X;
@@ -238,15 +255,16 @@ namespace _2D_Minigame
             int index = y * 39 + x;
             var label = labelList[index].Item1;
 
-            
+
             if (label is CustomLabel customLabel && customLabel.isCoinField)
             {
+                Console.WriteLine("customlabel.isCoinField?: " + customLabel.isCoinField);
                 CollectCoin(x, y);
-                customLabel.isCoinField = false; 
+                customLabel.isCoinField = false;
                 label.Content = "";
             }
 
-            label.Content = ""; 
+            label.Content = "";
 
             Image playerImage = new Image
             {
@@ -269,13 +287,13 @@ namespace _2D_Minigame
                     int newX = x + dx;
                     int newY = y + dy;
 
-                    
+
                     if (newX >= 0 && newY >= 0 && newX < 39 && newY < 15)
                     {
                         int index = newY * 39 + newX;
                         var label = labelList[index].Item1;
 
-                       
+
                         if (label.Background == fogBrush)
                         {
                             label.Background = Brushes.LightGray;
@@ -285,7 +303,7 @@ namespace _2D_Minigame
             }
         }
 
-        //Spielfeld erstellung
+        //Field creation
         private void CreateLabels()
         {
             int Spacing = 20;
@@ -302,7 +320,6 @@ namespace _2D_Minigame
 
                     AddLabelsInGrid(label, i, j);
                     AddLabelInList(label, i, j);
-
                 }
             }
         }
@@ -322,7 +339,7 @@ namespace _2D_Minigame
         private void PlaceQuestionMarksOnLabels(CustomLabel label, int i, int j)
         {
             Random random = new Random();
-            if (i == j || i + j == 38 || random.NextDouble() < 0.75) // diagonal, Fragezeichen-Wahrscheinlichkeit: 75% guter wert
+            if (i == j || i + j == 38 || random.NextDouble() < 0.75) // diagonal?, questionmark-probability: 75% good value || -> old generation
             {
                 label.CustomAttribute = "Brushes.LightGray";
 
@@ -350,12 +367,11 @@ namespace _2D_Minigame
                 label.Foreground = Brushes.Purple;
                 label.isQuestionMarkField = false;
 
-
-                // Füge hier Code hinzu, um Münzen in einigen der begehbaren Felder zu platzieren
-                if (random.NextDouble() < 0.05) // Wahrscheinlichkeit für Münzen: 5%
-                {
-                    label.isCoinField = true;
-                }
+                /** removed random invisible generated coins bug **/
+                //if (random.NextDouble() < 0.05) // Wahrscheinlichkeit für Münzen: 5%
+                //{
+                //    label.isCoinField = true;
+                //}
             }
         }
         private void AddLabelsInGrid(CustomLabel label, int i, int j)
@@ -398,7 +414,7 @@ namespace _2D_Minigame
             int startY = 1;
 
             int index = startY * 39 + startX;
-            labelList[index].Item1.Background = fogBrush;//Startfeld?
+            labelList[index].Item1.Background = fogBrush;//starting field?
             stack.Push(index);
 
             while (stack.Count > 0)
